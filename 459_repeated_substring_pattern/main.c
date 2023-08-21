@@ -1,6 +1,7 @@
 #include <assert.h>  // assert
 #include <stdbool.h>  // bool false true
 #include <stdio.h>  // puts
+#include <stdlib.h>  // free malloc
 #include <string.h>  // strlen
 
 bool repeatedSubstringPatternLowMem(const char *s) {
@@ -57,9 +58,21 @@ int main(void) {
     assert(func("ababba") == false); \
 } while (0)
 
+#define MAX_S_LEN 10000
+
+#define TEST_MAX_STR(func) do { \
+    char *s = malloc(MAX_S_LEN + 1); \
+    memset(s, 'a', MAX_S_LEN); \
+    s[MAX_S_LEN] = '\0'; \
+    assert(func(s) == true); \
+    free(s); \
+} while (0)
+
 int test_main(void) {
     TEST_PATTERNS(repeatedSubstringPatternLowMem);
+    TEST_MAX_STR(repeatedSubstringPatternLowMem);
     TEST_PATTERNS(repeatedSubstringPattern);
+    TEST_MAX_STR(repeatedSubstringPattern);
     puts("ALL TESTS PASSED");
     return 0;
 }
