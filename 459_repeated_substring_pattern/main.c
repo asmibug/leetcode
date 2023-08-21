@@ -29,7 +29,7 @@ bool repeatedSubstringPatternLowMem(const char *s) {
 }
 
 bool repeatedSubstringPattern(const char *s) {
-    unsigned s_len = strlen(s);
+    unsigned s_len = (unsigned) strlen(s);
     // copy s twice: without first character and without last
     char ss[2 * s_len - 2 /* add one for null-termination */ + 1];
     strncpy(ss, s + 1, s_len - 1);
