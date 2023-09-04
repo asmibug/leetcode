@@ -1,8 +1,5 @@
-
 #include <vector>  // std::vector
 #include <unordered_set>  // std::unordered_set
-
-#include "acutest.h"  // TEST_ASSERT TEST_CHECK TEST_LIST TEST_MSG
 
 struct ListNode {
     int val;
@@ -64,6 +61,8 @@ std::vector<ListNode> ConstructList(const std::vector<int>& elements, int pos) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+
+#include "acutest.h"  // TEST_ASSERT TEST_CHECK TEST_LIST TEST_MSG
 
 void TestAcutest() {
     TEST_CHECK(true);
