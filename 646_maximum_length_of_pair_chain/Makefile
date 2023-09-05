@@ -7,7 +7,7 @@ BUILD_CMD = $(CXX) $(CXXFLAGS) $^ $(LDFLAGS) -o $@
 default: prog.exe
 
 prog.exe: main.o
-	$BUILD_CMD
+	$(BUILD_CMD)
 
 test: test.exe
 	./$<
