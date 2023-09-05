@@ -1,4 +1,4 @@
-CPPFLAGS = -I"$(HOME)/lib/acutest/include"
+CPPFLAGS = -I"$(HOME)/lib/acutest/include"  # https://github.com/mity/acutest
 
 CXXFLAGS = -std=c++20 -Wpedantic -g3 \
 -Wall -Wextra \
