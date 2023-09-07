@@ -42,10 +42,11 @@ int MinBuildTimeWithRecursion(std::vector<int> blocks, int split) {
 }
 
 int MinBuildTimeDynamic(std::vector<int> blocks, int split) {
+    int n = blocks.size();
     std::sort(blocks.begin(), blocks.end());
-    std::vector<int> time_for_workers_num(blocks.size() + 1);
-    for (int blocks_num = 1; blocks_num <= blocks.size(); ++blocks_num) {
-        std::vector<int> new_times(blocks.size() + 1);
+    std::vector<int> time_for_workers_num(n + 1);
+    for (int blocks_num = 1; blocks_num <= n; ++blocks_num) {
+        std::vector<int> new_times(n + 1);
         new_times[0] = INT_MAX;
         new_times[blocks_num] = blocks[blocks_num - 1];
         for (int workers_num = blocks_num - 1; workers_num > 0; --workers_num) {
@@ -74,12 +75,47 @@ int MinBuildTimePriority(const std::vector<int>& blocks, int split) {
     return merged_blocks.top();
 }
 
+namespace {
+    bool IsBuildPossible(const std::vector<int>& blocks, int split, int time) {
+        int workers = 1;
+        for (int i = blocks.size(); i > 0; --i) {
+            if (workers == 0) {
+                return false;
+            }
+            while (blocks[i - 1] + split <= time) {
+                workers *= 2;
+                time -= split;
+                if (workers >= i) {
+                    return true;
+                }
+            }
+            --workers;
+        }
+        return true;
+    }
+}
+
+int MinBuildTimeBinSearch(std::vector<int> blocks, int split) {
+    std::sort(blocks.begin(), blocks.end());
+    int left_time = blocks.back();
+    int right_time = split * blocks.size() + blocks.back();
+    while (left_time < right_time) {
+        int mid_time = left_time + (right_time - left_time) / 2;
+        if (IsBuildPossible(blocks, split, mid_time)) {
+            right_time = mid_time;
+        } else {
+            left_time = mid_time + 1;
+        }
+    }
+    return left_time;
+}
+
 using std::vector;
 
 class Solution {
 public:
     int minBuildTime(vector<int>& blocks, int split) {
-        return MinBuildTimePriority(blocks, split);
+        return MinBuildTimeBinSearch(blocks, split);
     }
 };
 
@@ -93,42 +129,56 @@ public:
     TEST_MSG("Function returned %d", t); \
 } while (0)
 
-void TestOne() {
-    CHECK_MinBuildTime(MinBuildTimeWithRecursion, 7, std::vector<int>{7}, 1);
-}
+namespace {
+    void TestOne() {
+        CHECK_MinBuildTime(MinBuildTimeWithRecursion, 7, std::vector<int>{7}, 1);
+    }
 
-void TestTwo() {
-    CHECK_MinBuildTime(MinBuildTimeWithRecursion, 8,
-                       (std::vector<int>{6, 7}), 1);
-}
+    void TestTwo() {
+        CHECK_MinBuildTime(MinBuildTimeWithRecursion, 8,
+                        (std::vector<int>{6, 7}), 1);
+    }
 
-void TestThree() {
-    CHECK_MinBuildTime(MinBuildTimeWithRecursion, 8,
-                       (std::vector<int>{5, 6, 7}), 1);
-}
+    void TestThree() {
+        CHECK_MinBuildTime(MinBuildTimeWithRecursion, 8,
+                        (std::vector<int>{5, 6, 7}), 1);
+    }
 
-void TestOneDynamic() {
-    CHECK_MinBuildTime(MinBuildTimeDynamic, 7, std::vector<int>{7}, 1);
-}
+    void TestOneDynamic() {
+        CHECK_MinBuildTime(MinBuildTimeDynamic, 7, std::vector<int>{7}, 1);
+    }
 
-void TestTwoDynamic() {
-    CHECK_MinBuildTime(MinBuildTimeDynamic, 8, (std::vector<int>{6, 7}), 1);
-}
+    void TestTwoDynamic() {
+        CHECK_MinBuildTime(MinBuildTimeDynamic, 8, (std::vector<int>{6, 7}), 1);
+    }
 
-void TestThreeDynamic() {
-    CHECK_MinBuildTime(MinBuildTimeDynamic, 8, (std::vector<int>{5, 6, 7}), 1);
-}
+    void TestThreeDynamic() {
+        CHECK_MinBuildTime(MinBuildTimeDynamic, 8, (std::vector<int>{5, 6, 7}), 1);
+    }
 
-void TestOnePriority() {
-    CHECK_MinBuildTime(MinBuildTimePriority, 7, std::vector<int>{7}, 1);
-}
+    void TestOnePriority() {
+        CHECK_MinBuildTime(MinBuildTimePriority, 7, std::vector<int>{7}, 1);
+    }
 
-void TestTwoPriority() {
-    CHECK_MinBuildTime(MinBuildTimePriority, 8, (std::vector<int>{6, 7}), 1);
-}
+    void TestTwoPriority() {
+        CHECK_MinBuildTime(MinBuildTimePriority, 8, (std::vector<int>{6, 7}), 1);
+    }
 
-void TestThreePriority() {
-    CHECK_MinBuildTime(MinBuildTimePriority, 8, (std::vector<int>{5, 6, 7}), 1);
+    void TestThreePriority() {
+        CHECK_MinBuildTime(MinBuildTimePriority, 8, (std::vector<int>{5, 6, 7}), 1);
+    }
+
+    void TestOneBinSearch() {
+        CHECK_MinBuildTime(MinBuildTimeBinSearch, 7, std::vector<int>{7}, 1);
+    }
+
+    void TestTwoBinSearch() {
+        CHECK_MinBuildTime(MinBuildTimeBinSearch, 8, (std::vector<int>{6, 7}), 1);
+    }
+
+    void TestThreeBinSearch() {
+        CHECK_MinBuildTime(MinBuildTimeBinSearch, 8, (std::vector<int>{5, 6, 7}), 1);
+    }
 }
 
 TEST_LIST = {
@@ -139,7 +189,10 @@ TEST_LIST = {
     {"test two blocks, dynamic algorithm", TestTwoDynamic},
     {"test three blocks, dynamic algorithm", TestThreeDynamic},
     {"test one block, priority algorithm", TestOnePriority},
-    {"test two blocks, priority algorithm", TestOnePriority},
-    {"test three blocks, priority algorithm", TestOnePriority},
+    {"test two blocks, priority algorithm", TestTwoPriority},
+    {"test three blocks, priority algorithm", TestThreePriority},
+    {"test one block, binary search algorithm", TestOneBinSearch},
+    {"test two blocks, binary search algorithm", TestTwoBinSearch},
+    {"test three blocks, binary search algorithm", TestThreeBinSearch},
     {NULL, NULL}
 };
