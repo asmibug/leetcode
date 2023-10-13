@@ -35,26 +35,29 @@ int FindIdxMax(MountainArray& array) {
     static constexpr int base = 1e5;
     static const int partition = 0.5 * (3 - sqrt(5)) * base;
 
+    struct Point {
+        int coord;
+        int value;
+    };
+
     int left = 0;
     int right = array.length() - 1;
-    int left_candidate = left + (right - left) * partition / base;
-    int right_candidate = left + (right + 1 - left) * (base - partition) / base;
-    int left_value = array.get(left_candidate);
-    int right_value = array.get(right_candidate);
+    int shift = (right - left) * partition / base;
+    Point left_candidate = {left + shift, array.get(left + shift)};
+    Point right_candidate = {right - shift, array.get(right - shift)};
     while (left < right) {
-        if (left_value < right_value) {
-            left = left_candidate + 1;
+        if (left_candidate.value < right_candidate.value) {
+            left = left_candidate.coord + 1;
             left_candidate = right_candidate;
-            left_value = right_value;
-            right_candidate = (
-                left + (right + 1 - left) * (base - partition) / base);
-            right_value = array.get(right_candidate);
+            int shift = (right - left) * partition / base;
+            right_candidate.coord = right - shift;
+            right_candidate.value = array.get(right_candidate.coord);
         } else {
-            right = right_candidate;
+            right = right_candidate.coord;
             right_candidate = left_candidate;
-            right_value = left_value;
-            left_candidate = left + (right - left) * partition / base;
-            left_value = array.get(left_candidate);
+            int shift = (right - left) * partition / base;
+            left_candidate.coord = left + shift;
+            left_candidate.value = array.get(left_candidate.coord);
         }
     }
     return left;
