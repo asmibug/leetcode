@@ -55,6 +55,6 @@ using std::vector;
 class Solution {
 public:
     string findDifferentBinaryString(vector<string>& nums) {
-        return GetDifferentParse(nums);
+        return GetDifferentDiagonal(nums);
     }
 };
