@@ -86,6 +86,8 @@ UTEST(CreateList, Two) {
 
 INSERT_TESTS_FOR(ReverseBetweenRecursion)
 
-INSERT_TESTS_FOR(ReverseBetweenIteration)
+INSERT_TESTS_FOR(ReverseBetweenIteration1)
+
+INSERT_TESTS_FOR(ReverseBetweenIteration2)
 
 UTEST_MAIN();

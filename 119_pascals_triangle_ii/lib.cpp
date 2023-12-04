@@ -1,3 +1,11 @@
+/**
+ * https://leetcode.com/problems/pascals-triangle-ii/
+ * 
+ * Approaches:
+ * 1) Calculate all rows
+ * 2) Calculate only required row using C_n^k / C_n^{k-1} = (n - k + 1) / k
+*/
+
 #include <vector>
 
 std::vector<int> GetRowIteration(int row_index) {

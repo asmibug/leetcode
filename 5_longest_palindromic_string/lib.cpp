@@ -1,3 +1,11 @@
+/**
+ * https://leetcode.com/problems/longest-palindromic-substring/
+ * 
+ * Approaches:
+ * 1) Each time expand from center
+ * 2) Expand forward (Manacher's algorithm)
+*/
+
 #include <algorithm>
 #include <string>
 #include <vector>

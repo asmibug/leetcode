@@ -1,3 +1,9 @@
+/**
+ * https://leetcode.com/problems/pascals-triangle/
+ * 
+ * Approach: just follow the definition of the Pascal's triangle
+*/
+
 #include <vector>  // std::vector
 
 std::vector<std::vector<int>> GetPascalTriangle(int num_rows) {

@@ -1,3 +1,9 @@
+/**
+ * https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
+ * 
+ * Approach: lower bound and upper bound binary search
+*/
+
 #include <functional>
 #include <vector>
 

@@ -1,3 +1,13 @@
+/**
+ * https://leetcode.com/problems/reverse-linked-list-ii/
+ * 
+ * The task should be solved iteratively.
+ * The dummy node should be used to simplify the code.
+ * There are 2 approaches:
+ * 1) Reverse the connections of individual nodes, and then reconnect the list
+ * 2) Iteratively move nodes to the beginning
+*/
+
 /**/
 // Definition for singly-linked list.
 struct ListNode {
@@ -41,7 +51,7 @@ ListNode* ReverseBetweenRecursion(ListNode* head, int left, int right) {
     return dummy.next;
 }
 
-ListNode* ReverseBetweenIteration(ListNode* head, int left, int right) {
+ListNode* ReverseBetweenIteration1(ListNode* head, int left, int right) {
     ListNode dummy(0, head);
     ListNode* cur = &dummy;
     for (int i = 1; i < left; ++i) {
@@ -49,7 +59,7 @@ ListNode* ReverseBetweenIteration(ListNode* head, int left, int right) {
     }
     auto left_end = cur;
     auto next = cur->next;
-    for (int i = 0; i < right - left + 1; ++i) {
+    for (int i = left; i <= right; ++i) {
         auto prev = cur;
         cur = next;
         next = cur->next;
@@ -60,9 +70,26 @@ ListNode* ReverseBetweenIteration(ListNode* head, int left, int right) {
     return dummy.next;
 }
 
+ListNode* ReverseBetweenIteration2(ListNode* head, int left, int right) {
+    ListNode dummy(0, head);
+    ListNode* cur = &dummy;
+    for (int i = 1; i < left; ++i) {
+        cur = cur->next;
+    }
+    auto left_end = cur;
+    auto tail = cur->next;
+    for (int i = left + 1; i <= right; ++i) {
+        auto node = tail->next;
+        tail->next = node->next;
+        node->next = left_end->next;
+        left_end->next = node;
+    }
+    return dummy.next;
+}
+
 class Solution {
 public:
     ListNode* reverseBetween(ListNode* head, int left, int right) {
-        return ReverseBetweenIteration(head, left, right);
+        return ReverseBetweenIteration1(head, left, right);
     }
 };

@@ -1,3 +1,10 @@
+/**
+ * https://leetcode.com/problems/text-justification/
+ * 
+ * Approach: Add words until they fit into string, and then
+ * add spaces number equal to ceil(spaces_left / words_left)
+*/
+
 #include <vector>  // std::vector
 #include <string>  // std::string
 
