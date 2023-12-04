@@ -1,3 +1,12 @@
+/**
+ * https://leetcode.com/problems/constrained-subsequence-sum/
+ * 
+ * To solve the problem, we need to maintain max-queue. Ways to do that:
+ * 1) Max-heap of (value, index)
+ * 2) Map-tree of (value, count) plus queue of (value)
+ * 3) Max-queue based on two max-stacks OR based on monotonous deque
+*/
+
 #include <algorithm>
 #include <cstddef>
 #include <map>
