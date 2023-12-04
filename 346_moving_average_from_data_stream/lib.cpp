@@ -1,19 +1,27 @@
+/**
+ * https://leetcode.com/problems/moving-average-from-data-stream/
+ * 
+ * Approaches:
+ * 1) Using queue
+ * 2) Using circular buffer
+*/
+
 #include <vector>
 
 class MovingAverage {
 public:
     MovingAverage(int size)
-        : size_(size) {
+        : max_size_(size) {
     }
     
     double next(int val) {
-        if (window_.size() == size_) {
+        if (window_.size() == max_size_) {
             sum_ -= window_[index_];
             window_[index_] = val;
         } else {
             window_.push_back(val);
         }
-        index_ = (index_ + 1) % size_;
+        index_ = (index_ + 1) % max_size_;
 
         sum_ += val;
         return 1.0 * sum_ / window_.size();
@@ -21,7 +29,7 @@ public:
 
 private:
     std::vector<int> window_;
-    unsigned size_;
+    unsigned max_size_;
     unsigned index_ = 0;
     int sum_ = 0;
 };
